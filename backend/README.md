@@ -78,7 +78,7 @@ yarn dev
 The backend server will run on:
 
 ```text id="vtcefk"
-http://localhost:4000
+http://localhost:3000
 ```
 
 ---
