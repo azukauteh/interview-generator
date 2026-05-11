@@ -1,0 +1,16 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel public/index.html",
+    "build": "parcel build public/index.html",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "parcel": "^2.16.4",
+    "typescript": "^6.0.3"
+  }
+}
+
