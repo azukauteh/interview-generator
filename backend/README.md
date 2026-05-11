@@ -1,4 +1,3 @@
-Here’s the **updated backend README.md** — refined to reflect the architecture choice (Render for backend, Vercel for frontend), and polished for developer onboarding:
 
 ---
 
