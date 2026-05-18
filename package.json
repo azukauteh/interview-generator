@@ -11,7 +11,7 @@
     "start": "node dist/server.cjs",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-     "test": "vitest run"
+    "test": "vitest run"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",

@@ -71,26 +71,18 @@ The project demonstrates:
 
 ```text
 interview-generator/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── schemas/
-│   │   ├── middleware/
-│   │   ├── docs/
-│   │   └── index.ts
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── styles/
-│   │   ├── index.html
-│   │   └── index.ts
-│   ├── package.json
-│   └── tsconfig.json
-│
+
+├── src/
+│   ├── main.ts          ← Frontend logic (fetch, DOM, latency tracking)
+│   └── style.css        ← Bento grid UI styles
+├── index.html           ← App shell
+├── server.ts            ← Express API + Groq integration
+├── vite.config.ts       ← Vite + proxy config
+├── tsconfig.json        ← TypeScript config
+├── package.json         ← Dependencies and scripts
+├── yarn.lock            ← Locked dependency versions
+├── .env.example         ← Environment variable template
+├── .gitignore
 └── README.md
 ```
 
