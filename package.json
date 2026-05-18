@@ -1,0 +1,38 @@
+{
+  "name": "interviewer-ai",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:server": "tsx server.ts",
+    "dev:client": "vite",
+    "dev": "tsx server.ts & vite",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
+    "start": "node dist/server.cjs",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+     "test": "vitest run"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "groq-sdk": "^1.2.0",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.8.0",
+    "@types/swagger-ui-express": "^4.1.8",
+    "autoprefixer": "^10.5.0",
+    "esbuild": "^0.28.0",
+    "tailwindcss": "^4.3.0",
+    "tsx": "^4.22.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.13",
+    "vitest": "^4.1.6"
+  }
+}
