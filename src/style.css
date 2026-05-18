@@ -1,3 +1,36 @@
+/**
+ * style.css
+ *
+ * Global styles for Interviewer.ai frontend.
+ * No framework — plain CSS with custom properties.
+ *
+ * Structure:
+ * - CSS tokens (custom properties) for colors, typography, and spacing
+ * - Base reset and body defaults
+ * - Bento grid layout (sidebar + status bar + question cards)
+ * - Dark sidebar card with input, difficulty toggle, and generate button
+ * - Status bar with dynamic title and description
+ * - Question cards with animation, tags, and copy-to-clipboard hint
+ * - Loading spinner and button states
+ * - Toast notification for clipboard feedback
+ * - Responsive breakpoints (tablet and mobile)
+ *
+ * Design tokens (defined in :root):
+ * - --bg            Background color
+ * - --card          Card surface color
+ * - --ink           Primary text color
+ * - --muted         Secondary text color
+ * - --accent        Indigo accent (#4f46e5)
+ * - --accent-light  Light indigo for card backgrounds
+ * - --border        Subtle border color
+ * - --success       Green for success states
+ * - --font-sans     Poppins (Google Fonts)
+ *
+ * @author  Uteh.A
+ * @version 1.0.0
+ */
+
+
 :root {
     --bg: #f1f5f9;
     --card: #ffffff;

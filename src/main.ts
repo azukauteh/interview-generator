@@ -1,3 +1,32 @@
+/**
+ * main.ts
+ *
+ * Frontend entry point for Interviewer.ai.
+ * Runs entirely in the browser — no framework, vanilla TypeScript only.
+ *
+ * Responsibilities:
+ * - Handles form submission and input validation
+ * - Calls POST /api/generate-questions on the Express backend
+ * - Tracks and displays real-time API latency using performance.now()
+ * - Updates the status bar (title + description) based on request state
+ * - Renders 3 AI-generated question cards into the bento grid
+ * - Handles copy-to-clipboard on question card click
+ * - Manages loading state (spinner, disabled button) during fetch
+ *
+ * DOM elements expected in index.html:
+ * - #question-form       — the submit form
+ * - #job-title           — job title text input
+ * - #submit-btn          — generate button
+ * - #status-title        — status bar heading
+ * - #status-desc         — status bar description
+ * - #latency             — latency display element
+ * - #q1, #q2, #q3        — question card containers
+ *
+ * @author  Uteh.A
+ * @version 1.0.0
+ */
+
+
 // Vanilla TypeScript Interviewer logic
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('question-form') as HTMLFormElement;

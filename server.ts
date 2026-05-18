@@ -1,3 +1,25 @@
+
+/**
+ * server.ts
+ *
+ * Entry point for the Interviewer.ai Express backend.
+ *
+ * Responsibilities:
+ * - Serves the static frontend (index.html + assets)
+ * - Exposes POST /api/generate-questions for AI question generation
+ * - Validates requests using Zod before reaching the AI layer
+ * - Integrates Groq SDK (LLaMA 3.3 70B) for question generation
+ * - Mounts Swagger UI at /docs for API exploration
+ *
+ * Environment variables required:
+ * - GROQ_API_KEY  — Groq API key (https://console.groq.com)
+ * - PORT          — Server port (defaults to 3000)
+ *
+ * @author  Uteh.A
+ * @version 1.0.0
+ */
+
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
