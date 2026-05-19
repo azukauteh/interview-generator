@@ -40,7 +40,7 @@ The project demonstrates:
 * TypeScript
 * HTML5
 * CSS3
-* Parcel
+* vite
 
 ### Backend
 
@@ -292,7 +292,7 @@ The application can be deployed using:
 
 * Vercel
 * Render
-* Railway
+
 
 Ensure the following environment variables are configured in production:
 
@@ -353,5 +353,5 @@ MIT
 
 ---
 
-Built with Groq · Express · TypeScript · Parcel
+Built with Groq · Express · TypeScript · Vite
 
