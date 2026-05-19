@@ -1,15 +1,15 @@
 {
-  "name": "interviewer-ai",
-  "private": true,
+  "name": "interview-generator",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev:server": "tsx server.ts",
     "dev:client": "vite",
     "dev": "tsx server.ts & vite",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
-    "start": "node dist/server.cjs",
-    "lint": "tsc --noEmit",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
+    "start": "node dist/server.mjs",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --fix",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
@@ -28,6 +28,7 @@
     "@types/node": "^25.8.0",
     "@types/swagger-ui-express": "^4.1.8",
     "autoprefixer": "^10.5.0",
+    "biome": "^1.8.0",
     "esbuild": "^0.28.0",
     "tailwindcss": "^4.3.0",
     "tsx": "^4.22.1",
