@@ -40,7 +40,7 @@ The project demonstrates:
 * TypeScript
 * HTML5
 * CSS3
-* vite
+* Vite
 
 ### Backend
 
@@ -63,7 +63,8 @@ The project demonstrates:
 
 ### Deployment
 
-* Vercel
+* Railway
+
 
 ---
 
@@ -92,7 +93,7 @@ interview-generator/
 
 ```mermaid
 flowchart TD
-    A[Frontend - TypeScript + Parcel]
+    A[Frontend - TypeScript + Vite]
     B[Backend - Express API]
     C[Groq API]
     
@@ -291,7 +292,7 @@ yarn lint
 The application can be deployed using:
 
 * Vercel
-* Render
+* Railway
 
 
 Ensure the following environment variables are configured in production:
