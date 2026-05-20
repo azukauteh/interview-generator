@@ -63,7 +63,7 @@ The project demonstrates:
 
 ### Deployment
 
-* Railway
+* Render
 
 
 ---
@@ -291,8 +291,8 @@ yarn lint
 
 The application can be deployed using:
 
-* Vercel
-* Railway
+* Render
+
 
 
 Ensure the following environment variables are configured in production:
