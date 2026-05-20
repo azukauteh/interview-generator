@@ -18,19 +18,19 @@
  * @version 1.0.0
  */
 
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import Groq from "groq-sdk";
-import path from "path";
 import swaggerUi from "swagger-ui-express";
-import { fileURLToPath } from "url";
 import { z } from "zod";
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -139,9 +139,9 @@ Return ONLY raw JSON — no markdown, no explanation:
 		}
 
 		res.json({ questions: parsed.questions.slice(0, 3) });
-	} catch (err: any) {
-		console.error("[generate-questions error]", err.message);
-		res.status(500).json({ error: "Failed to generate questions." });
+	} catch (err: unknown) {
+		const message = err instanceof Error ? err.message : "Unknown error";
+		console.error("[generate-questions error]", message);
 	}
 });
 

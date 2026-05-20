@@ -99,10 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			statusTitle.textContent = "Analysis Complete";
 			statusDesc.textContent = `Synthesized 3 ${difficultyTier.toLowerCase()} questions for ${jobTitle}.`;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error(error);
 			statusTitle.textContent = "Error";
-			statusDesc.textContent = error.message;
+			const message = error instanceof Error ? error.message : "Unknown error";
+			statusDesc.textContent = message;
 		} finally {
 			setLoading(false);
 		}
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const tierBtns = document.querySelectorAll(".tier-btn");
 	tierBtns.forEach((btn) => {
 		btn.addEventListener("click", () => {
-			tierBtns.forEach((b) => b.classList.remove("active"));
+			for (const b of tierBtns) b.classList.remove("active");
 			btn.classList.add("active");
 		});
 	});
