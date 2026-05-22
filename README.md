@@ -1,6 +1,6 @@
 
 
-# Interview Question Generator
+# Interviewer.ai
 
 Full-stack application that generates 3 tailored interview questions based on a job title and difficulty tier, powered by Groq's LLaMA 3.3 70B model.
  The platform allows users to enter a role such as **Customer Success Manager**, **Frontend Engineer**, or **Product Manager** and instantly receive thoughtful, role-specific interview questions generated in real time.
@@ -289,7 +289,7 @@ yarn lint
 
 ## Deployment
 
-The application can be deployed using:
+The application is deployed using:
 
 * Render
 
