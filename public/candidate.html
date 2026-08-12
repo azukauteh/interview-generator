@@ -1,0 +1,118 @@
+<!--
+/*
+feat(ui): add candidate preparation page with role-based layout
+
+- Created candidate.html with responsive layout and Poppins font
+- Added header with logo, candidate role badge, and logout button
+- Implemented main bento-grid structure:
+  • Input form for target job role
+  • Status card with prep instructions
+  • Three question cards with placeholders and sample answer blocks
+- Styled role-specific tags (Core Strategy, Experience, Behavioral)
+- Added footer with system latency and copyright
+- Integrated toast notification for clipboard copy
+- Linked candidate.ts script for dynamic question/answer rendering
+feat(ui): add candidate preparation page with role-based layout
+
+- Created candidate.html with responsive layout and Poppins font
+- Added header with logo, candidate role badge, and logout button
+- Implemented main bento-grid structure:
+  • Input form for target job role
+  • Status card with prep instructions
+  • Three question cards with placeholders and sample answer blocks
+- Styled role-specific tags (Core Strategy, Experience, Behavioral)
+- Added footer with system latency and copyright
+- Integrated toast notification for clipboard copy
+- Linked candidate.ts script for dynamic question/answer rendering
+ 
+*/
+-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interviewer.ai | Candidate Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Interviewer<span>.ai</span></h1>
+        </div>
+        <div class="header-right">
+            <span class="role-badge candidate-badge">Candidate</span>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+    </header>
+    <main class="bento-grid">
+        <section class="card card-input">
+            <div class="corner-accent"></div>
+            <label>Your Target Role</label>
+            <form id="candidate-form">
+                <input type="text" id="job-role" placeholder="e.g. Customer Success Manager" required>
+                <label>What you'll get</label>
+                <ul class="focus-list">
+                    <li>3 likely interview questions</li>
+                    <li>Sample answers for each</li>
+                    <li>Role-specific preparation</li>
+                </ul>
+                <button type="submit" id="submit-btn" class="btn">
+                    <span class="btn-text">Prepare Me</span>
+                    <span class="loader hidden"></span>
+                </button>
+            </form>
+        </section>
+        <section class="card card-status">
+            <div id="status-content">
+                <h2 id="status-title">Ready to Prep</h2>
+                <p id="status-desc">Enter your target role to get tailored questions and sample answers.</p>
+            </div>
+            <div class="status-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+            </div>
+        </section>
+        <section class="card card-q" id="q1">
+            <span class="q-num">Question 01</span>
+            <p class="q-text" id="q1-text">---</p>
+            <div class="answer-block hidden" id="a1-block">
+                <span class="answer-label">Sample Answer</span>
+                <p class="answer-text" id="a1-text"></p>
+            </div>
+            <span class="q-tag">Core Strategy</span>
+        </section>
+        <section class="card card-q" id="q2">
+            <span class="q-num">Question 02</span>
+            <p class="q-text" id="q2-text">---</p>
+            <div class="answer-block hidden" id="a2-block">
+                <span class="answer-label">Sample Answer</span>
+                <p class="answer-text" id="a2-text"></p>
+            </div>
+            <span class="q-tag" style="color:#9333ea;background:#f5f3ff">Experience</span>
+        </section>
+        <section class="card card-q" id="q3">
+            <span class="q-num">Question 03</span>
+            <p class="q-text" id="q3-text">---</p>
+            <div class="answer-block hidden" id="a3-block">
+                <span class="answer-label">Sample Answer</span>
+                <p class="answer-text" id="a3-text"></p>
+            </div>
+            <span class="q-tag" style="color:#0891b2;background:#ecfeff">Behavioral</span>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-item" id="latency">System Latency: Optimized</div>
+        <div class="footer-item">© 2026 Interviewer.ai</div>
+    </footer>
+    <div id="toast" class="toast hidden">Copied to clipboard</div>
+    <script type="module" src="/src/pages/candidate.ts"></script>
+</body>
+</html>
+

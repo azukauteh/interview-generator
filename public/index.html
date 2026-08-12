@@ -1,0 +1,93 @@
+<!--
+/*
+feat(ui): add login and signup page with role selection
+
+- Created index.html as the main authentication entry point
+- Added header with logo and subtitle
+- Implemented tab toggle between Login and Sign Up forms
+- Built login form with email, password, and role selector (interviewer/candidate)
+- Built signup form with email, password, and role selector
+- Added error message placeholder for authentication feedback
+- Linked login.ts script for handling form logic and API integration
+- Applied Poppins font and shared style.css for consistent UI
+*/
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interviewer.ai — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1 class="logo">Interviewer<span class="accent">.ai</span></h1>
+        <p class="auth-sub">Sign in to your account</p>
+      </div>
+
+      <!-- Tab toggle -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login">Login</button>
+        <button class="auth-tab" id="tab-signup">Sign Up</button>
+      </div>
+
+      <!-- Login form -->
+      <form id="login-form" class="auth-form">
+        <input type="email" id="login-email" placeholder="Email address" required />
+        <input type="password" id="login-password" placeholder="Password" required />
+        <div class="role-selector">
+          <p class="role-label">I am a:</p>
+          <div class="role-options">
+            <label class="role-option">
+              <input type="radio" name="login-role" value="interviewer" required />
+              <span>Interviewer</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="login-role" value="candidate" />
+              <span>Candidate</span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" id="login-btn">
+          <span id="login-btn-text">Sign In</span>
+          <span id="login-spinner" class="btn-spinner hidden"></span>
+        </button>
+      </form>
+
+      <!-- Signup form -->
+      <form id="signup-form" class="auth-form hidden">
+        <input type="email" id="signup-email" placeholder="Email address" required />
+        <input type="password" id="signup-password" placeholder="Password (min 8 chars)" required />
+        <div class="role-selector">
+          <p class="role-label">I am a:</p>
+          <div class="role-options">
+            <label class="role-option">
+              <input type="radio" name="signup-role" value="interviewer" required />
+              <span>Interviewer</span>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="signup-role" value="candidate" />
+              <span>Candidate</span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" id="signup-btn">
+          <span id="signup-btn-text">Create Account</span>
+          <span id="signup-spinner" class="btn-spinner hidden"></span>
+        </button>
+      </form>
+
+      <p id="auth-error" class="auth-error hidden"></p>
+    </div>
+  </div>
+  <script type="module" src="/src/pages/login.ts"></script>
+</body>
+</html>
+
