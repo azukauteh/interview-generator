@@ -38,6 +38,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /*Static frontend*/
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 /* Role-specific pages */
 app.get("/api/interviewer", (_req, res) => {
