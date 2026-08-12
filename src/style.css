@@ -26,7 +26,7 @@
  * - --success       Green for success states
  * - --font-sans     Poppins (Google Fonts)
  *
- * @author  Uteh.A
+ *
  * @version 1.0.0
  */
 
@@ -40,6 +40,163 @@
 	--border: #e2e8f0;
 	--success: #10b981;
 	--font-sans: "Poppins", sans-serif;
+}
+
+/* ── Auth page ── */
+.auth-page {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--bg);
+	padding: 1.5rem;
+}
+
+.auth-card {
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 1.5rem;
+	padding: 2.5rem 2rem;
+	width: 100%;
+	max-width: 420px;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.auth-header {
+	text-align: center;
+	margin-bottom: 1.75rem;
+}
+
+.auth-sub {
+	font-size: 0.85rem;
+	color: var(--muted);
+	margin-top: 0.25rem;
+}
+
+.auth-tabs {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1.5rem;
+	background: var(--bg);
+	border-radius: 0.75rem;
+	padding: 0.25rem;
+}
+
+.auth-tab {
+	flex: 1;
+	padding: 0.6rem;
+	border: none;
+	border-radius: 0.5rem;
+	background: transparent;
+	font-family: "Poppins", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--muted);
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.auth-tab.active {
+	background: var(--card);
+	color: var(--accent);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.auth-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.875rem;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+	width: 100%;
+	padding: 0.8rem 1rem;
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	font-family: "Poppins", sans-serif;
+	font-size: 0.875rem;
+	color: var(--ink);
+	background: var(--bg);
+	outline: none;
+	transition: border-color 0.2s;
+}
+
+.auth-form input:focus {
+	border-color: var(--accent);
+}
+
+.auth-form button[type="submit"] {
+	width: 100%;
+	padding: 0.875rem;
+	background: var(--accent);
+	color: #fff;
+	border: none;
+	border-radius: 0.75rem;
+	font-family: "Poppins", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	cursor: pointer;
+	position: relative;
+	transition: background 0.2s;
+}
+
+.auth-form button:hover {
+	background: #4338ca;
+}
+.auth-form button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.role-selector {
+	margin: 0.25rem 0;
+}
+
+.role-label {
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+	margin-bottom: 0.5rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.role-options {
+	display: flex;
+	gap: 0.75rem;
+}
+
+.role-option {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 0.75rem;
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	cursor: pointer;
+	font-size: 0.8rem;
+	font-weight: 500;
+	transition: border-color 0.2s;
+}
+
+.role-option:has(input:checked) {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+.auth-error {
+	margin-top: 0.75rem;
+	padding: 0.75rem 1rem;
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	border-radius: 0.75rem;
+	color: #dc2626;
+	font-size: 0.8rem;
+	text-align: center;
 }
 
 * {
@@ -328,11 +485,11 @@ input[type="text"]:focus {
 }
 
 .q-text {
-	font-size: 1.25rem;
-	font-weight: 700;
-	line-height: 1.4;
+	font-size: 0.95rem;
+	font-weight: 600;
+	line-height: 1.55;
 	color: var(--ink);
-	margin-bottom: 1.5rem;
+	flex: 1;
 }
 
 .q-tag {
@@ -433,4 +590,76 @@ footer {
 		grid-column: auto;
 		grid-row: auto;
 	}
+}
+
+/* ── Answer block ── */
+.answer-block {
+	margin-top: 0.75rem;
+	padding: 0.875rem;
+	background: #f8fafc;
+	border-left: 3px solid var(--accent);
+	border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.answer-label {
+	display: block;
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--accent);
+	margin-bottom: 0.4rem;
+}
+
+.answer-text {
+	font-size: 0.85rem;
+	color: var(--ink);
+	line-height: 1.6;
+}
+
+/* ── Header right ── */
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.role-badge {
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	padding: 0.3rem 0.75rem;
+	border-radius: 99px;
+}
+
+.interviewer-badge {
+	background: var(--accent-light);
+	color: var(--accent);
+}
+
+.candidate-badge {
+	background: #f0fdf4;
+	color: #16a34a;
+}
+
+.logout-btn {
+	font-size: 0.75rem;
+	font-weight: 600;
+	padding: 0.4rem 0.875rem;
+	border-radius: 0.5rem;
+	border: 1px solid var(--border);
+	background: transparent;
+	color: var(--muted);
+	cursor: pointer;
+	transition: all 0.2s;
+	width: auto;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.logout-btn:hover {
+	border-color: #dc2626;
+	color: #dc2626;
+	background: #fef2f2;
 }

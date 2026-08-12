@@ -1,17 +1,25 @@
 /**
- * server.test.ts
- *
- * Unit tests for Interviewer.ai backend logic.
- * Tests Zod schema validation and response parsing
- * without making real API calls.
- *
- * Run: yarn test
- */
+
+  test(server): add unit tests for schema validation and response parsing
+
+- Created server.test.ts using Vitest
+- Replicated QuestionRequestSchema from server.ts with Zod
+- Added tests for jobTitle validation (length, required, max 100 chars)
+- Verified difficultyTier defaults to Standard and accepts Advanced
+- Ensured invalid difficultyTier values are rejected
+- Implemented parseQuestionsResponse helper to strip markdown fences
+- Added tests for parsing clean JSON, fenced JSON, and slicing to 3 questions
+- Covered error cases: invalid JSON and missing questions field
+
+    Run: yarn test
+*/
+
+
 
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
-// ── Replicate the schema from server.ts ───────────────────────────
+/* Replicate the schema from server.ts */
 const QuestionRequestSchema = z.object({
 	jobTitle: z.string().min(2).max(100),
 	difficultyTier: z
@@ -20,7 +28,7 @@ const QuestionRequestSchema = z.object({
 		.default("Standard"),
 });
 
-// ── Replicate the response parser from server.ts ──────────────────
+/* Replicate the response parser from server.ts */
 function parseQuestionsResponse(raw: string): string[] {
 	const cleaned = raw.replace(/```json|```/g, "").trim();
 	const parsed = JSON.parse(cleaned);
@@ -30,7 +38,7 @@ function parseQuestionsResponse(raw: string): string[] {
 	return parsed.questions.slice(0, 3);
 }
 
-// ── Schema validation tests ───────────────────────────────────────
+/*  Schema validation tests */
 describe("QuestionRequestSchema", () => {
 	it("accepts a valid job title", () => {
 		const result = QuestionRequestSchema.safeParse({
@@ -88,7 +96,7 @@ describe("QuestionRequestSchema", () => {
 	});
 });
 
-// ── Response parser tests ─────────────────────────────────────────
+/* Response parser tests */
 describe("parseQuestionsResponse", () => {
 	it("parses a clean JSON response", () => {
 		const raw = JSON.stringify({

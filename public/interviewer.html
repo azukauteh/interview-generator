@@ -1,13 +1,28 @@
+<!--
+feat(ui): add interviewer dashboard page with question generation form
+
+- Created interviewer.html with responsive layout and Poppins font
+- Added header with logo, interviewer role badge, and logout button
+- Implemented main bento-grid structure:
+  • Input form for job title, difficulty tier toggle, and focus areas
+  • Status card with dynamic instructions and icon
+  • Three question cards with placeholders and role-specific tags
+- Styled tier selection buttons (Standard, Advanced) for interviewer flow
+- Added footer with system latency and copyright
+- Integrated toast notification for clipboard copy
+- Linked interviewer.ts script for dynamic question generation and rendering
+-->
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interviewer.ai | Generate Questions</title>
+    <title>Interviewer.ai | Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script type="module" src="/src/main.ts"></script>
     <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
@@ -15,45 +30,38 @@
         <div class="logo">
             <h1>Interviewer<span>.ai</span></h1>
         </div>
-        <div class="badge">
-            <div class="status-dot"></div>
-            AI Engine: Groq LLaMA 3.3 70B
+        <div class="header-right">
+            <span class="role-badge interviewer-badge">Interviewer</span>
+            <button id="logout-btn" class="logout-btn">Logout</button>
         </div>
     </header>
-
     <main class="bento-grid">
-        <!-- Input Section -->
         <section class="card card-input">
             <div class="corner-accent"></div>
             <label>Position To Analyze</label>
             <form id="question-form">
                 <input type="text" id="job-title" placeholder="e.g. Customer Success Manager" required>
-                
                 <label>Difficulty Tier</label>
                 <div class="tier-select">
-                    <button type="button" class="tier-btn active">Standard</button>
-                    <button type="button" class="tier-btn">Advanced</button>
+                    <button type="button" class="tier-btn active" data-tier="Standard">Standard</button>
+                    <button type="button" class="tier-btn" data-tier="Advanced">Advanced</button>
                 </div>
-
                 <label>Focus Areas</label>
                 <ul class="focus-list">
                     <li>Technical Proficiency</li>
                     <li>Behavioral Alignment</li>
                     <li>Problem Solving</li>
                 </ul>
-
                 <button type="submit" id="submit-btn" class="btn">
                     <span class="btn-text">Generate Questions</span>
                     <span class="loader hidden"></span>
                 </button>
             </form>
         </section>
-
-        <!-- Status Section -->
         <section class="card card-status">
             <div id="status-content">
                 <h2 id="status-title">Awaiting Input</h2>
-                <p id="status-desc">Enter a job title to generate custom deep-dive questions.</p>
+                <p id="status-desc">Enter a job title to generate custom interview questions.</p>
             </div>
             <div class="status-icon" id="status-icon">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -61,35 +69,28 @@
                 </svg>
             </div>
         </section>
-
-        <!-- Dynamic Question Sections -->
         <section class="card card-q" id="q1">
             <span class="q-num">Question 01</span>
             <p class="q-text" id="q1-text">---</p>
             <span class="q-tag">Core Strategy</span>
         </section>
-
         <section class="card card-q" id="q2">
             <span class="q-num">Question 02</span>
             <p class="q-text" id="q2-text">---</p>
             <span class="q-tag" style="color:#9333ea;background:#f5f3ff">Experience</span>
         </section>
-
         <section class="card card-q" id="q3">
             <span class="q-num">Question 03</span>
             <p class="q-text" id="q3-text">---</p>
             <span class="q-tag" style="color:#0891b2;background:#ecfeff">Behavioral</span>
         </section>
     </main>
-
     <footer>
         <div class="footer-item" id="latency">System Latency: Optimized</div>
-        <div class="footer-item">Data Integrity: Verified</div>
-        <div class="footer-item">© 2026 Recruiting Intelligence</div>
+        <div class="footer-item">© 2026 Interviewer.ai</div>
     </footer>
-
     <div id="toast" class="toast hidden">Copied to clipboard</div>
+    <script type="module" src="/src/pages/interviewer.ts"></script>
 </body>
 </html>
-
 

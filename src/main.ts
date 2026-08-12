@@ -22,11 +22,19 @@
  * - #latency             — latency display element
  * - #q1, #q2, #q3        — question card containers
  *
- * @author  Uteh.A
+ *
  * @version 1.0.0
  */
 
-// Vanilla TypeScript Interviewer logic
+/* Auth guard — redirect to login if no token
+ */
+const token = localStorage.getItem("access_token");
+if (!token) {
+	window.location.href = "/";
+}
+
+/* Vanilla TypeScript Interviewer logic
+ */
 document.addEventListener("DOMContentLoaded", () => {
 	const form = document.getElementById("question-form") as HTMLFormElement;
 	const input = document.getElementById("job-title") as HTMLInputElement;

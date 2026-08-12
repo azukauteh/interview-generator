@@ -1,33 +1,24 @@
-/**
- * server.ts
- *
- * Entry point for the Interviewer.ai Express backend.
- *
- * Responsibilities:
- * - Serves the static frontend (index.html + assets)
- * - Exposes POST /api/generate-questions for AI question generation
- * - Validates requests using Zod before reaching the AI layer
- * - Integrates Groq SDK (LLaMA 3.3 70B) for question generation
- * - Mounts Swagger UI at /docs for API exploration
- *
- * Environment variables required:
- * - GROQ_API_KEY  — Groq API key (https://console.groq.com)
- * - PORT          — Server port (defaults to 3000)
- *
- * @author  Uteh.A
- * @version 1.0.0
- */
+/*feat(server): clean entry point with role-based routes and Swagger docs
+
+- Added Express setup with CORS and JSON middleware
+- Mounted /api/auth, /api/interviewer, and /api/candidate routes
+- Integrated Swagger UI at /docs using src/docs/swagger.ts
+- Served static frontend from /public directory
+- Added role-specific pages (interviewer.html, candidate.html)
+- Default route serves index.html for login
+- Ensured server listens on PORT with startup logs
+*/
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
-import Groq from "groq-sdk";
 import swaggerUi from "swagger-ui-express";
-import { z } from "zod";
-
-dotenv.config();
+import swaggerDocument from "./src/docs/swagger.js";
+import authRoutes from "./src/routes/auth";
+import { router as candidateRoutes } from "./src/routes/candidate";
+import interviewerRoutes from "./src/routes/interviewer";
+import { router as questionsRouter } from "./src/routes/questions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,122 +28,31 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/auth", authRoutes);
+app.use("/api/interviewer", interviewerRoutes);
+app.use("/api/candidate", candidateRoutes);
 
-// ── Groq client ───────────────────────────────────────────────────
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
-// ── Zod schema ────────────────────────────────────────────────────
-const QuestionRequestSchema = z.object({
-	jobTitle: z.string().min(2).max(100),
-	difficultyTier: z
-		.enum(["Standard", "Advanced"])
-		.optional()
-		.default("Standard"),
-});
-
-// ── Swagger ───────────────────────────────────────────────────────
-const swaggerDocument = {
-	openapi: "3.0.0",
-	info: { title: "Interviewer.ai API", version: "1.0.0" },
-	paths: {
-		"/api/generate-questions": {
-			post: {
-				summary: "Generate 3 interview questions",
-				requestBody: {
-					required: true,
-					content: {
-						"application/json": {
-							schema: {
-								type: "object",
-								properties: {
-									jobTitle: {
-										type: "string",
-										example: "Customer Success Manager",
-									},
-									difficultyTier: {
-										type: "string",
-										enum: ["Standard", "Advanced"],
-									},
-								},
-							},
-						},
-					},
-				},
-				responses: {
-					200: {
-						description: "Success",
-						content: {
-							"application/json": {
-								schema: {
-									type: "object",
-									properties: {
-										questions: { type: "array", items: { type: "string" } },
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-	},
-};
-
+/*Routes */
+app.use("/api", questionsRouter);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// ── POST /api/generate-questions ──────────────────────────────────
-app.post("/api/generate-questions", async (req, res) => {
-	const validation = QuestionRequestSchema.safeParse(req.body);
-	if (!validation.success) {
-		res.status(400).json({ error: validation.error.issues[0].message });
-		return;
-	}
+/*Static frontend*/
+app.use(express.static(path.join(__dirname, "public")));
 
-	const { jobTitle, difficultyTier } = validation.data;
-
-	const modifier =
-		difficultyTier === "Advanced"
-			? "Questions must be senior-level, testing deep expertise and leadership."
-			: "Questions should focus on general strategy and behavioral aspects.";
-
-	const prompt = `
-Generate exactly 3 thoughtful interview questions for a "${jobTitle}" position.
-${modifier}
-Return ONLY raw JSON — no markdown, no explanation:
-{"questions": ["question one", "question two", "question three"]}
-`.trim();
-
-	try {
-		const completion = await groq.chat.completions.create({
-			model: "llama-3.3-70b-versatile",
-			messages: [{ role: "user", content: prompt }],
-			temperature: 0.7,
-			max_tokens: 500,
-		});
-
-		const text = completion.choices[0]?.message?.content ?? "";
-		const cleaned = text.replace(/```json|```/g, "").trim();
-		const parsed = JSON.parse(cleaned);
-
-		if (!Array.isArray(parsed.questions)) {
-			throw new Error("Unexpected response shape.");
-		}
-
-		res.json({ questions: parsed.questions.slice(0, 3) });
-	} catch (err: unknown) {
-		const message = err instanceof Error ? err.message : "Unknown error";
-		console.error("[generate-questions error]", message);
-	}
+/* Role-specific pages */
+app.get("/api/interviewer", (_req, res) => {
+	res.sendFile(path.join(__dirname, "public", "interviewer.html"));
+});
+app.get("/api/candidate", (_req, res) => {
+	res.sendFile(path.join(__dirname, "public", "candidate.html"));
 });
 
-// ── Serve static frontend ─────────────────────────────────────────
-app.use(express.static(path.join(__dirname)));
-
+/* Default — login page*/
 app.get("/{*path}", (_req, res) => {
-	res.sendFile(path.join(__dirname, "index.html"));
+	res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ── Start ─────────────────────────────────────────────────────────
+/* Start server */
 app.listen(PORT, () => {
 	console.log(`🚀 Server running at http://localhost:${PORT}`);
 	console.log(`📖 Swagger docs  at http://localhost:${PORT}/docs`);
