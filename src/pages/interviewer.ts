@@ -12,7 +12,7 @@ feat(ui): add interviewer dashboard script with JWT guard
 
 // Auth guard
 const token = localStorage.getItem("access_token");
-if (!token) window.location.href = "/index.html";
+if (!token) window.location.href = "/";
 
 // DOM refs
 const form = document.getElementById("question-form") as HTMLFormElement;
@@ -48,7 +48,7 @@ document.querySelectorAll<HTMLButtonElement>(".tier-btn").forEach((btn) => {
 logoutBtn.addEventListener("click", () => {
 	localStorage.removeItem("access_token");
 	localStorage.removeItem("user_role");
-	window.location.href = "/index.html";
+	window.location.href = "/";
 });
 
 // Copy to clipboard
