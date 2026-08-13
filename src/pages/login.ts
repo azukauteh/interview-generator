@@ -61,9 +61,9 @@ function redirectByRole(role: string): void {
 	localStorage.setItem("user_role", role);
 
 	if (role === "interviewer") {
-		window.location.href = "/public/interviewer.html";
+		window.location.href = "/interviewer";
 	} else if (role === "candidate") {
-		window.location.href = "/public/candidate.html";
+		window.location.href = "/candidate";
 	} else {
 		window.location.href = "/";
 	}

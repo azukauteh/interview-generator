@@ -11,7 +11,7 @@ feat(ui): add candidate prep page script with JWT guard
 
 // Auth guard
 const token = localStorage.getItem("access_token");
-if (!token) window.location.href = "/index.html";
+if (!token) window.location.href = "/";
 
 // DOM refs
 const form = document.getElementById("candidate-form") as HTMLFormElement;
@@ -38,7 +38,7 @@ const aBlocks = [1, 2, 3].map(
 logoutBtn.addEventListener("click", () => {
 	localStorage.removeItem("access_token");
 	localStorage.removeItem("user_role");
-	window.location.href = "/index.html";
+	window.location.href = "/";
 });
 
 function setLoading(loading: boolean) {
