@@ -1,13 +1,28 @@
-/*feat(server): clean entry point with role-based routes and Swagger docs
+/**
+ * server.ts
+ *
+ * Clean entry point for Interviewer.ai backend.
+ *
+ * Features:
+ * - Express setup with CORS and JSON middleware
+ * - Role-based API routes:
+ *   • /api/auth → authentication (signup/login)
+ *   • /api/interviewer → interviewer dashboard flows
+ *   • /api/candidate → candidate prep flows
+ *   • /api/questions → shared question generation
+ * - Swagger UI mounted at /docs for API documentation
+ * - Static frontend served from /public and /assets
+ * - Role-specific pages:
+ *   • /interviewer → interviewer.html
+ *   • /candidate → candidate.html
+ *   • / → index.html (login)
+ * - Startup logs confirm server port and docs URL
+ *
+ * Usage:
+ *   yarn dev to start the server.
+ *   Access Swagger docs at http://localhost:3000/docs
+ */
 
-- Added Express setup with CORS and JSON middleware
-- Mounted /api/auth, /api/interviewer, and /api/candidate routes
-- Integrated Swagger UI at /docs using src/docs/swagger.ts
-- Served static frontend from /public directory
-- Added role-specific pages (interviewer.html, candidate.html)
-- Default route serves index.html for login
-- Ensured server listens on PORT with startup logs
-*/
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -28,33 +43,39 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/interviewer", interviewerRoutes);
 app.use("/api/candidate", candidateRoutes);
-
-/*Routes */
 app.use("/api", questionsRouter);
+
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-/*Static frontend*/
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/assets", express.static(path.join(__dirname, "assets")));
 
-/* Role-specific pages */
-app.get("/api/interviewer", (_req, res) => {
-	res.sendFile(path.join(__dirname, "public", "interviewer.html"));
-});
-app.get("/api/candidate", (_req, res) => {
-	res.sendFile(path.join(__dirname, "public", "candidate.html"));
-});
+//Routes
+const publicDir = path.join(__dirname, "public");
+const assetsDir = path.join(__dirname, "assets");
 
-/* Default — login page*/
-app.get("/{*path}", (_req, res) => {
-	res.sendFile(path.join(__dirname, "public", "index.html"));
+//Static frontend
+app.use("/assets", express.static(assetsDir));
+app.use(express.static(publicDir));
+
+// Role-specific pages 
+app.get("/interviewer", (_req, res) => {
+	res.sendFile(path.join(publicDir, "interviewer.html"));
 });
 
-/* Start server */
+app.get("/candidate", (_req, res) => {
+	res.sendFile(path.join(publicDir, "candidate.html"));
+});
+
+// Default — login page
+app.get("/", (_req, res) => {
+	res.sendFile(path.join(publicDir, "index.html"));
+});
+
+// Start server 
 app.listen(PORT, () => {
-	console.log(`🚀 Server running at http://localhost:${PORT}`);
-	console.log(`📖 Swagger docs  at http://localhost:${PORT}/docs`);
+	console.log(`🚀 Server running on port ${PORT}`);
+	console.log(`📖 Swagger docs available at /docs`);
 });

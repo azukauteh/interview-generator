@@ -13,47 +13,41 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig } from "vite";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const pageRedirects: Plugin = {
-	name: "page-redirects",
-	configureServer(server) {
-		server.middlewares.use((req, _res, next) => {
-			const map: Record<string, string> = {
-				"/": "/public/index.html",
-				"/interviewer": "/public/interviewer.html",
-				"/candidate": "/public/candidate.html",
-			};
-			if (req.url && map[req.url]) req.url = map[req.url];
-			next();
-		});
-	},
-};
-
 export default defineConfig({
-	plugins: [tailwindcss(), pageRedirects],
+	plugins: [tailwindcss()],
+
 	resolve: {
-		alias: { "@": path.resolve(__dirname, ".") },
+		alias: {
+			"@": path.resolve(__dirname, "."),
+		},
 	},
+
 	build: {
+		outDir: "dist",
+
 		rollupOptions: {
 			input: {
-				login: path.resolve(__dirname, "public/index.html"),
+				index: path.resolve(__dirname, "public/index.html"),
 				interviewer: path.resolve(__dirname, "public/interviewer.html"),
 				candidate: path.resolve(__dirname, "public/candidate.html"),
 			},
 		},
 	},
+
 	server: {
 		port: 5173,
+
 		hmr: process.env.DISABLE_HMR !== "true",
+
 		watch: process.env.DISABLE_HMR === "true" ? null : {},
+
 		proxy: {
 			"/api": "http://localhost:3000",
-			"/auth": "http://localhost:3000",
 			"/docs": "http://localhost:3000",
 		},
 	},

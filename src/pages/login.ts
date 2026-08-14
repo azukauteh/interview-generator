@@ -1,14 +1,14 @@
-/*
- * feat(ui): add login and signup form handling
- * Implemented login.ts to manage authentication flows
- * Added tab switching logic between Login and Sign Up forms
- * Captured DOM references for forms, tabs, and error messages
- * Prepared event listeners for login and signup submission
- * Configured JWT storage in localStorage after successful auth
- * Redirects users to role-specific dashboards (interviewer/candidate)
- * Displays error feedback when authentication fails
-
-*/
+/**
+ * Authentication page logic.
+ *
+ * Handles:
+ * - Login
+ * - Signup
+ * - Tab switching
+ * - JWT storage
+ * - Role-based redirects
+ * - Authentication errors
+ */
 
 const loginForm = document.getElementById("login-form") as HTMLFormElement;
 const signupForm = document.getElementById("signup-form") as HTMLFormElement;
@@ -18,8 +18,9 @@ const tabSignup = document.getElementById("tab-signup") as HTMLButtonElement;
 
 const authError = document.getElementById("auth-error") as HTMLParagraphElement;
 
-/* Tab switching */
-
+/**
+ * Switch to login form.
+ */
 tabLogin.addEventListener("click", () => {
 	tabLogin.classList.add("active");
 	tabSignup.classList.remove("active");
@@ -30,6 +31,9 @@ tabLogin.addEventListener("click", () => {
 	authError.classList.add("hidden");
 });
 
+/**
+ * Switch to signup form.
+ */
 tabSignup.addEventListener("click", () => {
 	tabSignup.classList.add("active");
 	tabLogin.classList.remove("active");
@@ -40,12 +44,17 @@ tabSignup.addEventListener("click", () => {
 	authError.classList.add("hidden");
 });
 
-/* Helpers */
+/**
+ * Display authentication error.
+ */
 function showError(message: string): void {
 	authError.textContent = message;
 	authError.classList.remove("hidden");
 }
 
+/**
+ * Toggle button loading state.
+ */
 function setLoading(
 	button: HTMLButtonElement,
 	spinner: HTMLElement,
@@ -57,27 +66,42 @@ function setLoading(
 	text.style.opacity = loading ? "0" : "1";
 }
 
-function redirectByRole(role: string): void {
+/**
+ * Store authentication data and redirect
+ * the user to the appropriate dashboard.
+ */
+function redirectByRole(token: string, role: string): void {
+	localStorage.setItem("access_token", token);
 	localStorage.setItem("user_role", role);
 
-	if (role === "interviewer") {
-		window.location.href = "/interviewer";
-	} else if (role === "candidate") {
-		window.location.href = "/candidate";
-	} else {
-		window.location.href = "/";
+	console.log("Authentication successful");
+	console.log("Role:", role);
+	console.log("Token stored:", Boolean(localStorage.getItem("access_token")));
+
+	switch (role) {
+		case "interviewer":
+			window.location.href = "/interviewer";
+			break;
+
+		case "candidate":
+			window.location.href = "/candidate";
+			break;
+
+		default:
+			throw new Error(`Unknown user role: ${role}`);
 	}
 }
 
-/* Login */
+/**
+ * Login.
+ */
 loginForm.addEventListener("submit", async (event) => {
 	event.preventDefault();
+
 	authError.classList.add("hidden");
 
 	const button = document.getElementById("login-btn") as HTMLButtonElement;
-
 	const spinner = document.getElementById("login-spinner") as HTMLElement;
-
 	const text = document.getElementById("login-btn-text") as HTMLElement;
 
 	const email = (
@@ -95,7 +119,7 @@ loginForm.addEventListener("submit", async (event) => {
 	)?.value;
 
 	if (!role) {
-		showError("Please select a role");
+		showError("Please select a role.");
 		return;
 	}
 
@@ -116,30 +140,43 @@ loginForm.addEventListener("submit", async (event) => {
 
 		const data = await response.json();
 
+		console.log("Login response:", {
+			status: response.status,
+			data,
+		});
+
 		if (!response.ok) {
-			throw new Error(data.error || "Login failed");
+			throw new Error(data.error || "Login failed.");
 		}
 
-		// Backend returns { token, role }
-		localStorage.setItem("access_token", data.token);
+		if (!data.token || !data.role) {
+			throw new Error("Invalid authentication response from server.");
+		}
 
-		redirectByRole(data.role);
+		redirectByRole(data.token, data.role);
 	} catch (error: unknown) {
-		showError(error instanceof Error ? error.message : "Login failed");
+		console.error("Login error:", error);
+
+		showError(
+			error instanceof Error
+				? error.message
+				: "Unable to login. Please try again.",
+		);
 	} finally {
 		setLoading(button, spinner, text, false);
 	}
 });
 
-/* Signup */
+/**
+ * Signup.
+ */
 signupForm.addEventListener("submit", async (event) => {
 	event.preventDefault();
+
 	authError.classList.add("hidden");
 
 	const button = document.getElementById("signup-btn") as HTMLButtonElement;
-
 	const spinner = document.getElementById("signup-spinner") as HTMLElement;
-
 	const text = document.getElementById("signup-btn-text") as HTMLElement;
 
 	const email = (
@@ -157,7 +194,7 @@ signupForm.addEventListener("submit", async (event) => {
 	)?.value;
 
 	if (!role) {
-		showError("Please select a role");
+		showError("Please select a role.");
 		return;
 	}
 
@@ -178,16 +215,28 @@ signupForm.addEventListener("submit", async (event) => {
 
 		const data = await response.json();
 
+		console.log("Signup response:", {
+			status: response.status,
+			data,
+		});
+
 		if (!response.ok) {
-			throw new Error(data.error || "Signup failed");
+			throw new Error(data.error || "Signup failed.");
 		}
 
-		// Backend returns { token, role }
-		localStorage.setItem("access_token", data.token);
+		if (!data.token || !data.role) {
+			throw new Error("Invalid authentication response from server.");
+		}
 
-		redirectByRole(data.role);
+		redirectByRole(data.token, data.role);
 	} catch (error: unknown) {
-		showError(error instanceof Error ? error.message : "Signup failed");
+		console.error("Signup error:", error);
+
+		showError(
+			error instanceof Error
+				? error.message
+				: "Unable to create account. Please try again.",
+		);
 	} finally {
 		setLoading(button, spinner, text, false);
 	}
