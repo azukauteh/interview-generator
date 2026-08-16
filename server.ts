@@ -9,7 +9,6 @@
  *   • /api/auth → authentication (signup/login)
  *   • /api/interviewer → interviewer dashboard flows
  *   • /api/candidate → candidate prep flows
- *   • /api/questions → shared question generation
  * - Swagger UI mounted at /docs for API documentation
  * - Static frontend served from /public and /assets
  * - Role-specific pages:
@@ -23,7 +22,7 @@
  *   Access Swagger docs at http://localhost:3000/docs
  */
 
-
+import helmet from "helmet";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cors from "cors";
@@ -33,7 +32,6 @@ import swaggerDocument from "./src/docs/swagger.js";
 import authRoutes from "./src/routes/auth";
 import { router as candidateRoutes } from "./src/routes/candidate";
 import interviewerRoutes from "./src/routes/interviewer";
-import { router as questionsRouter } from "./src/routes/questions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,15 +39,17 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/interviewer", interviewerRoutes);
 app.use("/api/candidate", candidateRoutes);
-app.use("/api", questionsRouter);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
 
 
 //Routes
