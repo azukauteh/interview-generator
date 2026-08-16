@@ -22,6 +22,7 @@
 		"esbuild": "^0.28.0",
 		"express": "^5.2.1",
 		"groq-sdk": "^1.2.0",
+		"helmet": "^8.3.0",
 		"jsonwebtoken": "^9.0.3",
 		"pg": "^8.22.0",
 		"swagger-ui-express": "^5.0.1",
