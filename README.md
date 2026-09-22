@@ -58,8 +58,7 @@ The project demonstrates:
 
 ### AI
 
-* Groq API
-* Llama 3 / Mixtral models
+* Gemini-3.5 flash-lite
 
 
 
@@ -131,7 +130,7 @@ interview-generator/
 flowchart TD
     A[Frontend - TypeScript + Vite]
     B[Backend - Express API]
-    C[Groq API - LLaMA 3.3 70B]
+    C[model=gemini-3.5-flash-lite]
     D[(Supabase PostgreSQL)]
 
     A -->|POST /api/auth/signup or /login| B
@@ -160,7 +159,7 @@ flowchart TD
 
 Create a free API key at:
 
-[https://console.groq.com](https://console.groq.com)
+[https://console.model=gemini-3.5-flash.com](https://console.model=gemini-3.5-flash.com)
 
 ---
 
@@ -188,7 +187,7 @@ cp .env.example .env
 Add your API key to `.env`:
 
 ```env
-GROQ_API_KEY=your_groq_api_key_here
+Gemini_API_KEY=gemini-3.5-flash_api_key_here
 DATABASE_URL=your_supabase_pooler_connection_string
 JWT_SECRET=your_jwt_secret_here
 PORT=3000
@@ -358,6 +357,5 @@ MIT
 
 ---
 
-Built with Groq · Express · TypeScript · Vite
-
+Built with Gemini · Express · TypeScript · Vite
 

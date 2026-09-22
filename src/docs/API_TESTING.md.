@@ -1,0 +1,418 @@
+
+````md
+# Interviewer.ai — API Testing Notebook
+
+Base URL:
+
+http://localhost:3000
+
+Swagger:
+
+http://localhost:3000/docs
+
+---
+
+## 1. Health / Server Check
+
+```bash
+curl -I http://localhost:3000/
+````
+
+Expected:
+
+```text
+HTTP/1.1 200 OK
+```
+
+---
+
+# 2. AUTH — Signup
+
+## Interviewer Signup
+
+```bash
+curl -X POST http://localhost:3000/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "interviewer@test.com",
+    "password": "password123",
+    "role": "interviewer"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "token": "...",
+  "role": "interviewer"
+}
+```
+
+Save the returned token:
+
+```text
+INTERVIEWER_TOKEN=<token>
+```
+---
+
+## Candidate Signup
+
+```bash
+curl -X POST http://localhost:3000/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "candidate@test.com",
+    "password": "password123",
+    "role": "candidate"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "token": "...",
+  "role": "candidate"
+}
+```
+
+Save:
+
+```text
+CANDIDATE_TOKEN=<token>
+```
+
+---
+
+# 3. AUTH — Login
+
+## Interviewer Login
+
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "interviewer@test.com",
+    "password": "password123",
+    "role": "interviewer"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "token": "...",
+  "role": "interviewer"
+}
+```
+
+---
+
+## Candidate Login
+
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "candidate@test.com",
+    "password": "password123",
+    "role": "candidate"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "token": "...",
+  "role": "candidate"
+}
+```
+
+---
+
+# 4. INTERVIEWER — Generate Questions
+
+Requires:
+
+* Valid JWT
+* `interviewer` role
+
+## Standard
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer INTERVIEWER_TOKEN" \
+  -d '{
+    "jobTitle": "Customer Success Manager",
+    "difficultyTier": "Standard"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "questions": [
+    "...",
+    "...",
+    "..."
+  ]
+}
+```
+
+---
+
+## Advanced
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer INTERVIEWER_TOKEN" \
+  -d '{
+    "jobTitle": "Senior Backend Engineer",
+    "difficultyTier": "Advanced"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "questions": [
+    "...",
+    "...",
+    "..."
+  ]
+}
+```
+
+---
+
+# 5. CANDIDATE — Generate Questions + Answers
+
+Requires:
+
+* Valid JWT
+* `candidate` role
+
+```bash
+curl -X POST http://localhost:3000/api/candidate/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer CANDIDATE_TOKEN" \
+  -d '{
+    "jobRole": "Customer Success Manager"
+  }'
+```
+
+Expected:
+
+```json
+{
+  "questions": [
+    "...",
+    "...",
+    "..."
+  ],
+  "answers": [
+    "...",
+    "...",
+    "..."
+  ]
+}
+```
+
+---
+
+# 6. SECURITY TESTS
+
+## Missing Token
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jobTitle": "Backend Engineer"
+  }'
+```
+
+Expected:
+
+```text
+401
+```
+
+---
+
+## Invalid Token
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer invalid-token" \
+  -d '{
+    "jobTitle": "Backend Engineer"
+  }'
+```
+
+Expected:
+
+```text
+401
+```
+
+---
+
+## Candidate Accessing Interviewer Endpoint
+
+Use:
+
+```bash
+Authorization: Bearer CANDIDATE_TOKEN
+```
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer CANDIDATE_TOKEN" \
+  -d '{
+    "jobTitle": "Backend Engineer"
+  }'
+```
+
+Expected:
+
+```text
+403
+```
+
+---
+
+## Interviewer Accessing Candidate Endpoint
+
+```bash
+curl -X POST http://localhost:3000/api/candidate/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer INTERVIEWER_TOKEN" \
+  -d '{
+    "jobRole": "Backend Engineer"
+  }'
+```
+
+Expected:
+
+```text
+403
+```
+
+---
+
+# 7. VALIDATION TESTS
+
+## Missing jobTitle
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer INTERVIEWER_TOKEN" \
+  -d '{}'
+```
+
+Expected:
+
+```text
+400
+```
+
+---
+
+## jobTitle Too Short
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer INTERVIEWER_TOKEN" \
+  -d '{
+    "jobTitle": "A"
+  }'
+```
+
+Expected:
+
+```text
+400
+```
+
+---
+
+## Invalid Difficulty
+
+```bash
+curl -X POST http://localhost:3000/api/interviewer/questions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer INTERVIEWER_TOKEN" \
+  -d '{
+    "jobTitle": "Backend Engineer",
+    "difficultyTier": "Extreme"
+  }'
+```
+
+Expected:
+
+```text
+400
+```
+
+---
+
+# 8. TEST MATRIX
+
+| Test                  | Endpoint                     | Expected |
+| --------------------- | ---------------------------- | -------: |
+| Signup interviewer    | `/api/auth/signup`           |      200 |
+| Signup candidate      | `/api/auth/signup`           |      200 |
+| Duplicate signup      | `/api/auth/signup`           |      409 |
+| Interviewer login     | `/api/auth/login`            |      200 |
+| Candidate login       | `/api/auth/login`            |      200 |
+| Wrong password        | `/api/auth/login`            |      401 |
+| Interviewer questions | `/api/interviewer/questions` |      200 |
+| Candidate questions   | `/api/candidate/questions`   |      200 |
+| Missing token         | Protected endpoints          |      401 |
+| Invalid token         | Protected endpoints          |      401 |
+| Wrong role            | Protected endpoints          |      403 |
+| Invalid input         | Protected endpoints          |      400 |
+
+---
+
+# 9. Current API Surface
+
+POST /api/auth/signup
+POST /api/auth/login
+
+POST /api/interviewer/questions
+
+POST /api/candidate/questions
+
+GET /docs
+
+---
+
+# 10. Testing Notes
+
+Record:
+
+* Date:
+* Gemini model:
+* API response time:
+* HTTP status:
+* JSON response valid:
+* Questions generated:
+* Authentication passed:
+* Role authorization passed:
+* Validation passed:
+* Security headers verified:
+
+---

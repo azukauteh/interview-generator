@@ -663,3 +663,85 @@ footer {
 	color: #dc2626;
 	background: #fef2f2;
 }
+/* ── Tag variants ── */
+.tag-strategy {
+	color: var(--accent);
+	background: var(--accent-light);
+}
+.tag-experience {
+	color: #7c3aed;
+	background: #f5f3ff;
+}
+.tag-behavioral {
+	color: #0891b2;
+	background: #ecfeff;
+}
+
+/* ── Empty state ── */
+.empty-state {
+	grid-column: 2 / 4;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem 2rem;
+	background: var(--card);
+	border: 1px dashed var(--border);
+	border-radius: var(--radius);
+	text-align: center;
+	gap: 0.75rem;
+}
+
+.empty-state-icon {
+	color: var(--border);
+	margin-bottom: 0.5rem;
+}
+
+.empty-state-title {
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: var(--muted);
+}
+
+.empty-state-desc {
+	font-size: 0.8rem;
+	color: var(--border);
+	max-width: 280px;
+	line-height: 1.6;
+}
+
+/* .empty-state sets its own display, which ties in specificity with
+   .hidden and wins on source order. This combinator rule has higher
+   specificity than either alone, so it always wins regardless of
+   where either rule sits in the file. */
+.empty-state.hidden {
+	display: none;
+}
+
+.user-greeting {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+.user-greeting::before {
+	content: attr(data-initial);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--accent);
+	color: white;
+	font-weight: 700;
+	font-size: 0.75rem;
+	flex-shrink: 0;
+}
+
+.refresh-row {
+	display: flex;
+	justify-content: center;
+	margin-top: 1.5rem;
+}

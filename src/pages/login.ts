@@ -70,9 +70,10 @@ function setLoading(
  * Store authentication data and redirect
  * the user to the appropriate dashboard.
  */
-function redirectByRole(token: string, role: string): void {
+function redirectByRole(token: string, role: string, email: string): void {
 	localStorage.setItem("access_token", token);
 	localStorage.setItem("user_role", role);
+	localStorage.setItem("user_email", email);
 
 	console.log("Authentication successful");
 	console.log("Role:", role);
@@ -153,7 +154,7 @@ loginForm.addEventListener("submit", async (event) => {
 			throw new Error("Invalid authentication response from server.");
 		}
 
-		redirectByRole(data.token, data.role);
+		redirectByRole(data.token, data.role, email);
 	} catch (error: unknown) {
 		console.error("Login error:", error);
 
@@ -228,7 +229,7 @@ signupForm.addEventListener("submit", async (event) => {
 			throw new Error("Invalid authentication response from server.");
 		}
 
-		redirectByRole(data.token, data.role);
+		redirectByRole(data.token, data.role, email);
 	} catch (error: unknown) {
 		console.error("Signup error:", error);
 
