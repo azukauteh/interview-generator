@@ -1,7 +1,7 @@
 ## Interviewer.ai
 
 Interviewer.ai is a full-stack role-based platform that generates tailored interview questions 
-and candidate prep answers in real time, powered by Groq's LLaMA 3.3 70B model.
+and candidate prep answers in real time, powered by  Gemini-3.5 flash-lite.
 
 Interviewers enter a job title and difficulty tier to generate 3 role-specific questions. 
 Candidates enter their target role and receive 3 questions with AI-generated sample answers 
@@ -56,7 +56,7 @@ The project demonstrates:
 * Zod
 * Swagger UI
 
-### AI
+### LLM
 
 * Gemini-3.5 flash-lite
 
@@ -155,11 +155,8 @@ flowchart TD
 
 * Node.js v18+
 * Yarn
-* Groq API key (free, no credit card required)
+* Gemini API key 
 
-Create a free API key at:
-
-[https://console.model=gemini-3.5-flash.com](https://console.model=gemini-3.5-flash.com)
 
 ---
 
