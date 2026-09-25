@@ -12,10 +12,7 @@ const MODEL_CHAIN = [
 const MAX_ATTEMPTS_PER_MODEL = 3;
 const DEFAULT_MAX_OUTPUT_TOKENS = 1500;
 
-export type GeminiResponseSchema = Record<string, unknown>;
-
 export interface GenerateTextOptions {
-	responseSchema?: GeminiResponseSchema;
 	maxOutputTokens?: number;
 }
 
@@ -60,9 +57,6 @@ export async function generateText(
 								maxOutputTokens:
 									options.maxOutputTokens ?? DEFAULT_MAX_OUTPUT_TOKENS,
 							},
-							...(options.responseSchema
-								? { responseSchema: options.responseSchema }
-								: {}),
 						}),
 						signal: controller.signal,
 					},
