@@ -22,11 +22,11 @@
  *   Access Swagger docs at http://localhost:3000/docs
  */
 
-import helmet from "helmet";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cors from "cors";
 import express from "express";
+import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./src/docs/swagger.js";
 import authRoutes from "./src/routes/auth";
@@ -49,9 +49,6 @@ app.use("/api/candidate", candidateRoutes);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-
-
-
 //Routes
 const publicDir = path.join(__dirname, "public");
 const assetsDir = path.join(__dirname, "assets");
@@ -60,7 +57,7 @@ const assetsDir = path.join(__dirname, "assets");
 app.use("/assets", express.static(assetsDir));
 app.use(express.static(publicDir));
 
-// Role-specific pages 
+// Role-specific pages
 app.get("/interviewer", (_req, res) => {
 	res.sendFile(path.join(publicDir, "interviewer.html"));
 });
@@ -74,7 +71,7 @@ app.get("/", (_req, res) => {
 	res.sendFile(path.join(publicDir, "index.html"));
 });
 
-// Start server 
+// Start server
 app.listen(PORT, () => {
 	console.log(`🚀 Server running on port ${PORT}`);
 	console.log(`📖 Swagger docs available at /docs`);

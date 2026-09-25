@@ -6,12 +6,27 @@ feat(ui): add candidate prep page script with JWT guard
 - Cached DOM references for form, inputs, buttons, status, latency, and logout
 - Prepared arrays for question text, answer text, and answer blocks
 - Added logout handler to clear access_token and redirect to login
-- Sets up foundation for dynamic question/answer rendering on candidate page
+- Wires empty state / card visibility, plus a repeat-generation button
 */
 
 // Auth guard
 const token = localStorage.getItem("access_token");
 if (!token) window.location.href = "/";
+
+// Greeting
+const userGreeting = document.getElementById("user-greeting") as HTMLElement;
+const userEmail = localStorage.getItem("user_email");
+if (userEmail) {
+	const displayName = userEmail
+		.split("@")[0]
+		.replace(/[._-]/g, " ")
+		.replace(/\b\w/g, (c) => c.toUpperCase());
+	userGreeting.textContent = `Welcome, ${displayName}`;
+	userGreeting.setAttribute(
+		"data-initial",
+		displayName.charAt(0).toUpperCase(),
+	);
+}
 
 // DOM refs
 const form = document.getElementById("candidate-form") as HTMLFormElement;
@@ -23,6 +38,12 @@ const statusTitle = document.getElementById("status-title") as HTMLElement;
 const statusDesc = document.getElementById("status-desc") as HTMLElement;
 const latencyEl = document.getElementById("latency") as HTMLElement;
 const logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
+const refreshBtn = document.getElementById("refresh-btn") as HTMLButtonElement;
+
+const emptyState = document.getElementById("empty-state") as HTMLElement;
+const qCards = [1, 2, 3].map(
+	(n) => document.getElementById(`q${n}`) as HTMLElement,
+);
 
 const qTexts = [1, 2, 3].map(
 	(n) => document.getElementById(`q${n}-text`) as HTMLElement,
@@ -33,6 +54,35 @@ const aTexts = [1, 2, 3].map(
 const aBlocks = [1, 2, 3].map(
 	(n) => document.getElementById(`a${n}-block`) as HTMLElement,
 );
+
+// helper functions for empty state / card visibility
+function showEmptyState() {
+	emptyState.classList.remove("hidden");
+	for (const card of qCards) card.classList.add("hidden");
+	refreshBtn.classList.add("hidden");
+}
+
+function showCards() {
+	emptyState.classList.add("hidden");
+	for (const card of qCards) card.classList.remove("hidden");
+	refreshBtn.classList.remove("hidden");
+}
+
+// Page load: no questions generated yet.
+showEmptyState();
+
+// Experience level
+let activeLevel = "Entry";
+document
+	.querySelectorAll<HTMLButtonElement>(".level-select .tier-btn")
+	.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			for (const b of document.querySelectorAll(".level-select .tier-btn"))
+				b.classList.remove("active");
+			btn.classList.add("active");
+			activeLevel = btn.dataset.level ?? "Entry";
+		});
+	});
 
 // Logout
 logoutBtn.addEventListener("click", () => {
@@ -45,14 +95,12 @@ function setLoading(loading: boolean) {
 	submitBtn.disabled = loading;
 	btnText.style.opacity = loading ? "0" : "1";
 	loader.classList.toggle("hidden", !loading);
+	refreshBtn.disabled = loading;
 }
 
-// Form submit
-form.addEventListener("submit", async (e) => {
-	e.preventDefault();
-	const jobRole = jobInput.value.trim();
-	if (!jobRole) return;
-
+// Core generation call, shared by the form submit and the "New
+// Questions" button.
+async function generateQuestions(jobRole: string, level: string) {
 	setLoading(true);
 	statusTitle.textContent = "Preparing…";
 	statusDesc.textContent = `Generating questions and answers for "${jobRole}"…`;
@@ -73,7 +121,7 @@ form.addEventListener("submit", async (e) => {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
 			},
-			body: JSON.stringify({ jobRole }),
+			body: JSON.stringify({ jobRole, level }),
 		});
 
 		const data = await res.json();
@@ -92,11 +140,34 @@ form.addEventListener("submit", async (e) => {
 			aTexts[i].textContent = a;
 			aBlocks[i].classList.remove("hidden");
 		});
+
+		// Questions + answers populated — reveal the cards.
+		showCards();
 	} catch (err: unknown) {
 		const message = err instanceof Error ? err.message : "Unknown error";
 		statusTitle.textContent = "Error";
 		statusDesc.textContent = message;
+
+		// No valid data to show on failure — revert to empty state.
+		showEmptyState();
 	} finally {
 		setLoading(false);
 	}
+}
+
+// Form submit
+form.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const jobRole = jobInput.value.trim();
+	if (!jobRole) return;
+	await generateQuestions(jobRole, activeLevel);
+});
+
+// "New Questions" — reuses whatever role is currently in the input, no
+// retyping needed. Only visible once a successful generation has
+// happened.
+refreshBtn.addEventListener("click", async () => {
+	const jobRole = jobInput.value.trim();
+	if (!jobRole) return;
+	await generateQuestions(jobRole, activeLevel);
 });
